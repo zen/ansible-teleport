@@ -7,3 +7,12 @@
     daemon_reload: yes
     enabled: yes
   when: teleport_control_systemd
+
+- name: Restart Teleport
+  become: yes
+  systemd:
+    name: "teleport"
+    state: "restarted"
+    daemon_reload: yes
+    enabled: yes
+  when: teleport_control_systemd

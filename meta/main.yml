@@ -15,6 +15,9 @@ galaxy_info:
     - name: Ubuntu
       versions:
         - all
+    - name: Amazon Linux 2
+      versions:
+        - all
 
   galaxy_tags:
     - system
