@@ -1,6 +1,6 @@
 ---
 galaxy_info:
-  author: mdsketch
+  author: zen
   role_name: teleport
   description: An ansible role to install or update the teleport node service and teleport config on Debian based systems.
 

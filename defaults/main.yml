@@ -1,7 +1,7 @@
 ---
 teleport_version: "9.0.1"
 teleport_architecture: "amd64"
-teleport_bianry_path: /usr/local/bin/teleport
+teleport_binary_path: "/usr/local/bin/teleport"
 teleport_auth_token: ""
 teleport_ca_pin: ""
 teleport_auth_servers:
