@@ -3,9 +3,9 @@
   stat: "path={{ teleport_binary_path }}"
   register: teleport_bin
 
-- name: Get installed teleport version
+- name: Get installed teleport version # noqa risky-shell-pipe
   shell: |
-    {{ teleport_binary_path }} version
+    {{ teleport_binary_path }} version | cut -d' ' -f2 | tr -d v
   args:
     removes: "{{ teleport_config_path }}"
   register: "teleport_installed_version"
