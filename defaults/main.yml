@@ -1,18 +1,14 @@
 ---
-teleport_version: "9.0.1"
-teleport_architecture: "amd64"
-teleport_binary_path: "/usr/local/bin/teleport"
+teleport_version: 9.0.1
+teleport_package: teleport
+teleport_package_state: present
+teleport_create_config: true
 teleport_auth_token: ""
+teleport_ec2_join_token: ec2-teleport-join-token
 teleport_ca_pin: ""
 teleport_auth_servers:
   - "https://auth.example.com"
   - "127.0.0.1:3025"
-teleport_url: "https://get.gravitational.com/teleport-v{{ teleport_version }}-linux-{{ teleport_architecture }}-bin.tar.gz"
 teleport_config_path: "/etc/teleport.yaml"
-backup_teleport_config: yes
 teleport_config_template: "default_teleport.yaml.j2"
-teleport_service_template: "default_teleport.service.j2"
-teleport_control_systemd: yes
-teleport_template_config: yes
-# Default dont change
-teleport_update: no
+teleport_backup_config: true

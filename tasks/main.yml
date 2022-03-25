@@ -1,66 +1,20 @@
 ---
-- name: Check if teleport is installed.
-  stat: "path={{ teleport_binary_path }}"
-  register: teleport_bin
+- include_tasks: setup-RedHat.yml
+  when: ansible_os_family == 'RedHat'
 
-- name: Get installed teleport version # noqa risky-shell-pipe
-  shell: |
-    {{ teleport_binary_path }} version | cut -d' ' -f2 | tr -d v
-  args:
-    removes: "{{ teleport_config_path }}"
-  register: "teleport_installed_version"
-  when: teleport_bin.stat.exists
+- include_tasks: setup-Debian.yml
+  when: ansible_os_family == 'Debian'
 
-- name: Set teleport_update
-  set_fact:
-    teleport_update: "{{ teleport_version not in teleport_installed_version.stdout }}"
-  when: teleport_bin.stat.exists
-  changed_when: teleport_update
-  notify: Reload_Teleport
+- name: Install Teleport.
+  ansible.builtin.package:
+    name: "{{ teleport_package }}"
+    state: "{{ teleport_package_state }}"
 
-- name: Unarchive teleport
-  unarchive:
-    src: "{{ teleport_url }}"
-    dest: "/tmp"
-    remote_src: yes
-  when: not teleport_bin.stat.exists or teleport_update
+- include_tasks: config.yml
+  when: teleport_create_config | bool
 
-- name: Install teleport
-  become: yes
-  command: >
-    ./install
-    chdir=/tmp/teleport
-  when: not teleport_bin.stat.exists or teleport_update
-
-- name: Create teleport service
-  become: yes
-  template:
-    src: "{{ teleport_service_template }}"
-    dest: "/etc/systemd/system/teleport.service"
-    owner: "root"
-    group: "root"
-    mode: 0644
-  notify: Restart Teleport
-  when: teleport_control_systemd
-
-- name: Create teleport config
-  become: yes
-  template:
-    src: "teleport.yaml.j2"
-    dest: "{{ teleport_config_path }}"
-    owner: "root"
-    group: "root"
-    mode: 0600
-    backup: "{{ backup_teleport_config }}"
-  when: teleport_template_config
-  notify:
-    - Restart Teleport
-
-- name: Ensure teleport started and enabled on boot.
-  become: yes
-  systemd:
-    name: "teleport"
-    state: "started"
-    daemon_reload: yes
-    enabled: yes
-  when: teleport_control_systemd
+- name: Ensure Teleport is started and enabled at boot.
+  ansible.builtin.service:
+    name: teleport
+    state: started
+    enabled: true

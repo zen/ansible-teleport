@@ -1,18 +1,6 @@
 ---
-- name: Reload_Teleport
-  become: yes
-  systemd:
-    name: "teleport"
-    state: "reloaded"
-    daemon_reload: yes
-    enabled: yes
-  when: teleport_control_systemd
+- name: reload teleport
+  ansible.builtin.service: name=teleport state=reloaded
 
-- name: Restart Teleport
-  become: yes
-  systemd:
-    name: "teleport"
-    state: "restarted"
-    daemon_reload: yes
-    enabled: yes
-  when: teleport_control_systemd
+- name: restart teleport
+  ansible.builtin.service: name=teleport state=restarted
