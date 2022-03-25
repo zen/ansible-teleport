@@ -4,7 +4,7 @@ teleport_package: teleport
 teleport_package_state: present
 teleport_create_config: true
 teleport_auth_token: ""
-teleport_ec2_join_token: ec2-teleport-join-token
+teleport_iam_join_token: ec2-teleport-join-token
 teleport_ca_pin: ""
 teleport_auth_servers:
   - "https://auth.example.com"

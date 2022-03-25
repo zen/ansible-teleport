@@ -6,7 +6,8 @@
 
 - name: Add Teleport repository.
   ansible.builtin.yum_repository:
-    name: Gravitational Teleport packages
+    name: teleport
+    description: Gravitational Teleport packages
     baseurl: https://rpm.releases.teleport.dev/
     enabled: true
     gpgcheck: true
