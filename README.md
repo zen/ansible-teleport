@@ -1,6 +1,7 @@
 # Ansible Role: Teleport Node Service
 
-[![Ansible Galaxy](https://img.shields.io/badge/Ansible%20Galaxy-mdsketch.teleport-blueviolet)](https://galaxy.ansible.com/mdsketch/teleport)
+[![Ansible Galaxy](https://img.shields.io/badge/Ansible%20Galaxy-mdsketch.teleport-blueviolet)](https://galaxy.ansible.com/zen/teleport)
+![Ansible Quality Score](https://img.shields.io/ansible/quality/58613?style=plastic)
 
 An ansible role to install or update the teleport node service and teleport config using native packages (RPM and DEB).
 
@@ -16,27 +17,27 @@ A running teleport cluster so that you can provide the following information:
 
 ## Role Variables
 
-These are the default variables with their default values as defined in `defaults/main.yml`
+Variables with their default values as defined in `defaults/main.yml`
 
 ```sh
-teleport_config_template
+teleport_config_template: "default_teleport.yaml.j2"
 ```
 
 The template to use for the teleport configuration file. The default is `templates/default_teleport.yaml.j2`. It contains a basic configuration that will enable the SSH service and add a command label showing node uptime.
 
-There are many [options available](https://goteleport.com/docs/setup/reference/config/) and you can substitute in your own template and add any variables you want.
+There are many [options available](https://goteleport.com/docs/setup/reference/config/) and you can substitute in your own template and add any variables you want. We also ship template `templates/ec2_teleport.yaml.j2` using automatic node join with [ec2 tokens](https://goteleport.com/docs/setup/guides/joining-nodes-aws/).
 
 ```sh
-teleport_ca_pin
+teleport_ca_pin: ''
 ```
 
 The CA pin to use for the teleport configuration. This is optional, but [recommended](https://goteleport.com/docs/setup/admin/adding-nodes/#untrusted-auth-servers).
 
 ```sh
-teleport_config_path
+teleport_config_path: "/etc/teleport.yaml"
 ```
 
-The path to the teleport configuration file. The default is `/etc/teleport.yaml`.
+The path to the teleport configuration file.
 
 ```sh
 teleport_auth_servers
@@ -45,16 +46,11 @@ teleport_auth_servers
 The list of authentication servers to use for the teleport configuration. Examples are shown as defaults above.
 
 ```sh
-teleport_backup_config
+teleport_backup_config: true
+
 ```
 
-Runs a backup of the teleport configuration file before overwriting it. The default is `yes`.
-
-```sh
-teleport_config_template
-```
-
-Path to config template. The default is `default_teleport.yaml.j2`. There is additional template used for joining nodes using EC2 method, see `templates/ec2_teleport.yaml.j2`
+Runs a backup of the teleport configuration file before overwriting it.
 
 ## Dependencies
 
@@ -73,14 +69,13 @@ For example to install teleport using EC2 join method:
 *Inside `group_vars/all.yaml`*
 
 ```yaml
-teleport_version: 9.0.1
-teleport_config_template: templates/teleport.yaml.j2
+teleport_config_template: ec2_teleport.yaml.j2
 teleport_auth_servers:
   - https://teleport.company.cc:443
-teleport_ec2join_token: ec2-teleport-join-token
+teleport_ec2_join_token: ec2-teleport-join-token
 teleport_host_labels:
   owner: zen
-  type: standalonenon-eks
+  type: standalone
 ```
 
 ## License
@@ -89,4 +84,4 @@ MIT / BSD
 
 ## Author Information
 
-This role was created in 2021 by Matthew Draws, forked, corrected and adapted for EL based systems by Tomasz 'Zen' Napierala.
+This role was created in 2021 by Matthew Draws, forked, completely rewritten and adapted for EL based systems and using packages by Tomasz 'Zen' Napierala in 2022.
