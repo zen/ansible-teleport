@@ -23,22 +23,31 @@ ssh_service:
 {% else %}
 {% endif %}
 
-  # commands:
-  #   - name: region
-  #     command:
-  #       [
-  #         "/bin/sh",
-  #         "-c",
-  #         "curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | jq -r .region",
-  #       ]
-  #   - name: instanceId
-  #     command:
-  #       [
-  #         "/bin/sh",
-  #         "-c",
-  #         "curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | jq -r .instanceId",
-  #       ]
-  #     period: 24h0m0s
+  commands:
+    - name: aws_instance_type
+      command:
+        [
+          "/bin/sh",
+          "-c",
+          "curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | jq -r .instanceType",
+        ]
+      period: 24h0m0s
+    - name: aws_hostname_int
+      command:
+        [
+          "/bin/sh",
+          "-c",
+          "curl -s http://169.254.169.254/latest/meta-data/hostname",
+        ]
+      period: 24h0m0s
+    - name: aws_hostname_pub
+      command:
+        [
+          "/bin/sh",
+          "-c",
+          "curl -s http://169.254.169.254/latest/meta-data/public-hostname",
+        ]
+      period: 24h0m0s
 auth_service:
   enabled: no
 proxy_service:
